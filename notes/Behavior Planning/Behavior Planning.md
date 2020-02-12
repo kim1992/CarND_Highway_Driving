@@ -1,21 +1,21 @@
 # Behavior Planning
 
 ## 1.OVERVIEW
-![Alt text](./behavior control.png)
+![behavior](behavior control.png)
 
 
 
 ## 2.STRENGTHS VS WEAKNESS
 
 （有限状态机的优缺点）
-![strength vs weakness](./strength vs weakness.png)
+![strength vs weakness](strength vs weakness.png)
 
 
 
 ## 3.INPUTS
 
 （状态方程的输入）
-![Alt text](./inputs.png)
+![Alt text](inputs.png)
 
 
 
@@ -60,10 +60,10 @@
 
 ## 5.COST FUNCTION to choose a lane
 
-![Alt text](./cost.png)
+![Alt text](cost.png)
 
 **选择道路的损失函数（保持/变道）**
-![Alt text](./choose.png)
+![Alt text](choose.png)
 **Δs=sG−s （与目标道路上某一点Goal的直线距离）**
 How much distance the vehicle will have before it has to get into the goal lane.
 
@@ -73,7 +73,7 @@ The lateral distance between the goal lane and the options being considered. In 
 The cost function penalizes large ∣Δd∣ and we want that penalty to be bigger when Δs is small.
 **（Δd横向距离越大，Δs纵向直线距离越小 => 越惩罚 => cost越大越接近1）**
 
-![Alt text](./cost.png)
+![Alt text](cost.png)
 
 When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but when it's small, it approaches minimum cost (0).
 
@@ -81,7 +81,7 @@ When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but 
 
 
 ## 6.COST FUNCTION to speed（速度损失函数）
-![Alt text](./speed cost.png)
+![Alt text](speed cost.png)
 * The cost decreases as both intended lane and final lane are higher speed lanes.
 **（intended speed, final speed 越大 => cost 越小）**
 *The cost of being out of goal lane also becomes larger as vehicle approaches goal distance.
@@ -95,7 +95,7 @@ When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but 
 ## 7.Design and Weight Tweaking
 （损失函数的设计与调参）
 
-![Alt text](./cost function.png)
+![Alt text](cost function.png)
 难点：
 
 1. 解决新问题时不影响旧问题。
@@ -104,5 +104,5 @@ When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but 
 	PS：权重会因不同场景而有所不同。
 3. 推导每一个损失函数
 
-![Alt text](./difficults.png)
+![Alt text](difficults.png)
 
