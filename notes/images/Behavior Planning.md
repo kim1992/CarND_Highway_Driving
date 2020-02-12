@@ -8,7 +8,7 @@
 ## 2.STRENGTHS VS WEAKNESS
 
 （有限状态机的优缺点）
-![strength vs weakness](../notes/Behavior Planning/strength vs weakness.png)
+![strength vs weakness](./strength vs weakness.png)
 
 
 
