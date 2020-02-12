@@ -88,7 +88,7 @@
     git checkout e94b6e1
     ```
 
-- Provided simulator
+- Provided simulator downloaded from the [release tab](https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
 
 ### Usage
 
