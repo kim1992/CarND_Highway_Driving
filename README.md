@@ -8,7 +8,7 @@
 
 - **Localization**、**Sensor Fusion data**、**A Sparse map list of waypoints** around the highway are provided.
 
-- The car should be able to make one complete loop around the 6946m highway which takes a little over 5 mins. （至少完成一圈耗时略多于5分钟的6946米的行驶。）
+- The car should be able to make one complete loop around the 6946m highway which takes a little around 5 mins. （至少完成一圈耗时约5分钟的6946米的行驶。）
 
 - The car should avoid hitting other cars.（碰撞避免。）
 

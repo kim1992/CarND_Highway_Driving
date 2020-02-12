@@ -2,7 +2,7 @@
 
 ## 1. OVERVIEW
 ### 1.1 Motion Planning Problem（运动规划）
-![Alt text](./1581173255283.png)
+![Alt text](./motion planning.png)
 
 #### 配置空间
 #### 给定：
@@ -20,7 +20,7 @@
 
 1. Completeness（是否有解）
 2. Optimality（minimal cost）
- ![Alt text](./1581188324769.png)
+ ![Alt text](./properties.png)
 
 
 
@@ -35,22 +35,22 @@
 ***4. Sampling-based Methods（基于抽样算法)***
 - Discrete methods (A*, D*, D*-lite, Dijkstra's)
 - Probabilistic methods (RRT, RRT*, PRM)
-![Alt text](./1581189364510.png)
+![Alt text](./sampling-based.png)
 
 ### 3.1 A* 
-![Alt text](./1581217281617.png)
+![Alt text](./A*.png)
 PS：并不能保证生成的位置都是可行驶的（因为A*是离散的 不符合行驶特点）。
 
 ### 3.2 Hybrid A*
-![Alt text](./1581222515987.png)
+![Alt text](./hybrid A*.png)
 - 保证是可行驶的（Drivable），因为是*连续*的方法，牺牲了完整性（Completeness）和最优性（Optimality）。
 - 效率高（High Efficiency），几乎每次都能找到不错的路径。
 
 ### 3.3 Hybrid A* in Practice
 （bicycle model）
-![Alt text](./1581229027632.png)
+![Alt text](./practice.png)
 
-![Alt text](./1581228840080.png)
+![Alt text](./omega.png)
 w（omega）：有关变化无关状态的变化率（heading rate of change）
 v：值为正的恒定速度
 L：前后轴的距离
@@ -58,7 +58,8 @@ delta：车头转向角（添加的delta越多，计算量越高，计算时间�
 
 ### 3.4 Hybrid A* Pseudocode
 （非结构化环境中路径搜索的最佳算法之一）
-![Alt text](./1581233307869.png)
+![Alt text](./hybrid A* pseudocode.png)
+
 ``` 
 def expand(state, goal):
     next_states = []
@@ -158,7 +159,7 @@ def search(grid, start, goal):
 
 ## 4. ENVIRONMENT CLASSIFICATION（场景分类）
 
-![Alt text](./1581252450179.png)
+![Alt text](./env.png)
 #### 非结构化（停车场）：
 - 低速，限制少
 - 并不存在明显的参考路径
@@ -169,53 +170,53 @@ def search(grid, start, goal):
 	- 速度限制
 - 道路结构自身即可作为参考路径
 #### The Need for Time （时间作为第三个维度）
-![Alt text](./1581296181655.png)
+![Alt text](./time.png)
 
 
 
 ## 5.STRUCTURED TRAJCETORY GENERATION（结构化轨迹生成）
 
 ### 5.1 Boundary Conditions（道路边界条件）
-![Alt text](./1581316486043.png)
+![Alt text](./boundary.png)
 - 颠簸（加速度的不停变化）会让人不适
 - Jerk Minimization
 ### 5.2 Jerk Minimization
-![Alt text](./1581316774390.png)
+![Alt text](./jerk1.png)
 
 6 Coefficients => 6 Tunable Parameters => 6 Boundary Conditions
-![Alt text](./1581316872886.png)
-![Alt text](./1581316982908.png)
+![Alt text](./coefficients1.png)
+![Alt text](./coefficients2.png)
 【初始位置，速度，加速度，最终位置，速度，加速度】（s：纵向；d：横向）
 
 #### 推导公式：
-![Alt text](./1581319144725.png)
-![Alt text](./1581319184404.png)
-![Alt text](./1581319197679.png)
-![Alt text](./1581319250401.png)
-![Alt text](./1581319359574.png)
-![Alt text](./1581319370188.png)
+![Alt text](./jerk2.png)
+![Alt text](./jerk3.png)
+![Alt text](./jerk4.png)
+![Alt text](./jerk5.png)
+![Alt text](./jerk6.png)
+![Alt text](./jerk7.png)
 
 ### 5.3 Polynomial Trajectory Generation（多项式解算器）
-![Alt text](./1581319681772.png)
+![Alt text](./polynomial.png)
 
 ### 5.4 Feasibility（可行性）
-![Alt text](./1581331821120.png)
+![Alt text](./feasibility1.png)
 - 最大速度（车辆自身限速）
 - 最小速度（倒车最低速度）
 - 最大加速度（横向侧滑，纵向动力输出）
 - 最小加速度（纵向制动）
 - 转向角度
-![Alt text](./1581333110012.png)
+![Alt text](./feasibility2.png)
 
 
 
 ## 6. 基于抽样的Polynomial Trajectory
 
 - 通过抽样大量的最终配置，在目标位置附近生出对应了Jerk Minimization的轨迹。
-![Alt text](./1581333733548.png)
+![Alt text](./trajectory1.png)
 
 - 丢掉所有不可行的轨迹（边界之外，碰撞风险）。
-![Alt text](./1581333815230.png)
+![Alt text](./trajectory2.png)
 
 - 排序（通过Cost Function）选择一条最优轨迹。
 	- Jerk （横向的Jerk优先）
