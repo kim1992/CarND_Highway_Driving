@@ -1,14 +1,14 @@
 # Behavior Planning
 
 ## 1.OVERVIEW
-![behavior control](../notes/Behavior Planning/behavior control.png)
+![behavior control](./images/behavior control.png)
 
 
 
 ## 2.STRENGTHS VS WEAKNESS
 
 （有限状态机的优缺点）
-![strength vs weakness](../notes/Behavior Planning/strength vs weakness.png)
+![strength vs weakness](./images/strength vs weakness.png)
 
 
 
