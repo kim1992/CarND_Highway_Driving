@@ -2,7 +2,7 @@
 
 ## 1. OVERVIEW
 ### 1.1 Motion Planning Problem（运动规划）
-![Alt text](./motion planning.png)
+![Alt text](./motion_planning.png)
 
 #### 配置空间
 #### 给定：
@@ -42,7 +42,7 @@
 PS：并不能保证生成的位置都是可行驶的（因为A*是离散的 不符合行驶特点）。
 
 ### 3.2 Hybrid A*
-![Alt text](./hybrid A*.png)
+![Alt text](./hybrid_A*.png)
 - 保证是可行驶的（Drivable），因为是*连续*的方法，牺牲了完整性（Completeness）和最优性（Optimality）。
 - 效率高（High Efficiency），几乎每次都能找到不错的路径。
 
@@ -58,7 +58,7 @@ delta：车头转向角（添加的delta越多，计算量越高，计算时间�
 
 ### 3.4 Hybrid A* Pseudocode
 （非结构化环境中路径搜索的最佳算法之一）
-![Alt text](./hybrid A* pseudocode.png)
+![Alt text](./hybrid_A*_pseudocode.png)
 
 ``` 
 def expand(state, goal):
