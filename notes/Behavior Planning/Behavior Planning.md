@@ -1,14 +1,14 @@
 # Behavior Planning
 
 ## 1.OVERVIEW
-![behavior control](./behavior control.png)
+![Alt text](./behavior_control.png)
 
 
 
 ## 2.STRENGTHS VS WEAKNESS
 
 （有限状态机的优缺点）
-![strength vs weakness](./strength vs weakness.png)
+![Alt text](./strength_weakness.png)
 
 
 
@@ -81,7 +81,7 @@ When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but 
 
 
 ## 6.COST FUNCTION to speed（速度损失函数）
-![Alt text](./speed cost.png)
+![Alt text](./speed_cost.png)
 * The cost decreases as both intended lane and final lane are higher speed lanes.
 **（intended speed, final speed 越大 => cost 越小）**
 *The cost of being out of goal lane also becomes larger as vehicle approaches goal distance.
@@ -95,7 +95,7 @@ When  `delta_d / delta_s` is big, this quantity approaches maximum cost (1) but 
 ## 7.Design and Weight Tweaking
 （损失函数的设计与调参）
 
-![Alt text](./cost function.png)
+![Alt text](./cost_function.png)
 难点：
 
 1. 解决新问题时不影响旧问题。
