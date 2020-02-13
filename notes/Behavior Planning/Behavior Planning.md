@@ -1,14 +1,14 @@
 # Behavior Planning
 
 ## 1.OVERVIEW
-![behavior control](./behavior control.png)
+![behavior control](/Users/jinjingjie/智能驾驶/Udacity-无人驾驶工程师/Path Planning/CarND_Highway_Driving_Project/notes/Behavior Planning/behavior control.png)
 
 
 
 ## 2.STRENGTHS VS WEAKNESS
 
 （有限状态机的优缺点）
-![strength vs weakness](./strength vs weakness.png)
+![strength vs weakness](/Users/jinjingjie/智能驾驶/Udacity-无人驾驶工程师/Path Planning/CarND_Highway_Driving_Project/notes/Behavior Planning/strength vs weakness.png)
 
 
 
