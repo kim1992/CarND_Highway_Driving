@@ -210,28 +210,28 @@
    
    if (car_ahead){
    		// if there is a car ahead
-   		if (!car_left && lane > 0){
-   				// if there is no car left and there is a left lane
-   				lane--; // change to left lane
-   		} else if (!car_right && lane !=2){
-   				// if there is no car right and there is right lane
-   				lane++; // change to right lane
-   		} else {
-   				speed_diff -= MAX_ACC;
-   		}
+     	if (!car_left && lane > 0){
+       		// if there is no car left and there is a left lane
+       		lane--; // change to left lane
+     	} else if (!car_right && lane !=2){
+      		 	// if there is no car right and there is right lane
+       		lane++; // change to right lane
+     	} else {
+       		speed_diff -= MAX_ACC;
+     	}
    } else {
-   		// if there is no car ahead
-   		if (lane != 1){
-   				// if the ego car is not on the middle lane
-   				if ((lane==0 && !car_right) || (lane==2 && !car_left)){
-   				// 1.if the ego car is on the left lane and there is no car right
-   				// 2.if the ego car is on the right lane and there is no car left
-   				lane =1; // change back to the middle lane
-   				}
-   		}
-   		if (ref_vel < MAX_SPEED){
-   				speed_diff += MAX_ACC;
-   		}
+     	// if there is no car ahead
+     	if (lane != 1){
+       		// if the ego car is not on the middle lane
+       		if ((lane==0 && !car_right) || (lane==2 && !car_left)){
+         			// 1.if the ego car is on the left lane and there is no car right
+         			// 2.if the ego car is on the right lane and there is no car left
+         			lane =1; // change back to the middle lane
+       		}
+     	}
+     	if (ref_vel < MAX_SPEED){
+       		speed_diff += MAX_ACC;
+     	}
    }
    ```
    
@@ -278,13 +278,13 @@
      	ptsy.push_back(prev_car_y);
      	ptsy.push_back(car_y);
    } else {
-     	// redifine reference states as previous path end point
-       // 如果previous points >= 2，那么将最近的2个points加入进来
-       // 同时更新ref_yaw角度，并以此作为new planning path的starting positions
-       ref_x = previous_path_x[prev_size-1];
-       ref_y = previous_path_y[prev_size-1];
+   		// redifine reference states as previous path end point
+   		// 如果previous points >= 2，那么将最近的2个points加入进来
+     	// 同时更新ref_yaw角度，并以此作为new planning path的starting positions
+     	ref_x = previous_path_x[prev_size-1];
+     	ref_y = previous_path_y[prev_size-1];
    
-       double ref_x_prev = previous_path_x[prev_size - 2];
+     	double ref_x_prev = previous_path_x[prev_size - 2];
        double ref_y_prev = previous_path_y[prev_size - 2];
        ref_yaw = atan2(ref_y-ref_y_prev, ref_x-ref_x_prev);
    
