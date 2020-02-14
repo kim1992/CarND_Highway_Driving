@@ -76,23 +76,19 @@ int main() {
         if (event == "telemetry") {
           // j[1] is the data JSON object
           
-          // Main car's localization Data
-          double car_x = j[1]["x"];
-          double car_y = j[1]["y"];
-          double car_s = j[1]["s"];
-          double car_d = j[1]["d"];
-          double car_yaw = j[1]["yaw"];
-          double car_speed = j[1]["speed"];
-
           // Previous path data given to the Planner
+          // ["previous_path_x"] The previous list of x points previously given to the simulator
+          // ["previous_path_y"] The previous list of y points previously given to the simulator
           auto previous_path_x = j[1]["previous_path_x"];
           auto previous_path_y = j[1]["previous_path_y"];
+
           // Previous path's end s and d values 
+          // ["end_path_s"] The previous list's last **point**'s frenet s value
+          // ["end_path_d"] The previous list's last **point**'s frenet d value
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
 
-          // Sensor Fusion Data, a list of all other cars on the same side 
-          //   of the road.
+          // Sensor Fusion Data, a list of all other cars on the same side of the road.
           auto sensor_fusion = j[1]["sensor_fusion"];
 
 
@@ -136,21 +132,22 @@ int main() {
               double check_speed = sqrt(vx*vx + vy*vy);
               double check_car_s = sensor_fusion[i][5]; //car's s position in frenet coordinates
               // Estimate car's position after executing previous trajectory.
+              // 查看车辆的未来位置
               check_car_s += ((double)prev_size * 0.02 * check_speed);
 
               if ( car_lane == lane ) {
                   // Car on the same lane.
-                  car_ahead |= check_car_s > car_s && check_car_s - car_s < 30;
-                } else if ( car_lane - lane == -1 ) {
+                  car_ahead |= ((check_car_s > car_s) && (check_car_s - car_s < 30));
+                } else if ( (car_lane - lane) == -1 ) {
                   // Car on the left lane.
-                  car_left |= car_s - 30 < check_car_s && car_s + 30 > check_car_s;
-                } else if ( car_lane - lane == 1 ) {
+                  car_left |= ((car_s - 30 < check_car_s) && (car_s + 30 > check_car_s));
+                } else if ( (car_lane - lane) == 1 ) {
                   // Car on the right lane.
-                  car_right |= car_s - 30 < check_car_s && car_s + 30 > check_car_s;
+                  car_right |= ((car_s - 30 < check_car_s) && (car_s + 30 > check_car_s));
                 }
            }
 
-           // Behavior: take action (change lane/speed up/slow down/) approaching the car ahead.
+          // Behavior: take action (change lane/speed up/slow down/) approaching the car ahead.
           double speed_diff = 0;
           const double MAX_SPEED = 49.5;
           const double MAX_ACC = .224;
@@ -184,7 +181,9 @@ int main() {
           // Trajectory: take advantages of speed and lane output from behavior, car coordinates, and previous path points.
           // Create a list of widely space(x, y) waypoints, evenly spaced at 30m
           // Later we will interpolate these waypoints with a spline
-          vector<double> ptsx;  
+          // 存储5个waypoints：2个来自previous path；3个来自接下来Frenet下的的30m, 60m, 90m
+          // 利用这5个waypoints构建spline曲线
+          vector<double> ptsx;  // store points in global coordinates
           vector<double> ptsy;
 
           // reference x, y, yaw
@@ -195,6 +194,8 @@ int main() {
           double ref_yaw = deg2rad(car_yaw);
 
           // if previous size is almost empty, use the car as starting reference
+          // 如果previous points不够，那么则用当前的位置通过ref_yaw来逆推出prev_car_x, prev_car_y
+          // 并与car_x, car_y一同加入ptsx和ptsy 作为previous points
           if (prev_size < 2){
               // use two points that make the path tangent（相切） to the car
               double prev_car_x = car_x - cos(car_yaw);
@@ -208,6 +209,8 @@ int main() {
 
           } else {
               // redifine reference states as previous path end point
+              // 如果previous points >= 2，那么将最近的2个points加入进来
+              // 同时更新ref_yaw角度，并以此作为new planning path的starting positions
               ref_x = previous_path_x[prev_size-1];
               ref_y = previous_path_y[prev_size-1];
 
@@ -225,6 +228,7 @@ int main() {
 
           // In Frenet add evenly(均匀地) 30m spaced points ahead of the starting reference
           // transform to global coordinate
+          // 将前方的30m，60m，90m的waypoints以Frenet坐标加入进来，同时转换成gloabl coordinates
           vector<double> next_wp0 = getXY(car_s + 30, 2 + 4*lane, map_waypoints_s, map_waypoints_x, map_waypoints_y);
           vector<double> next_wp1 = getXY(car_s + 60, 2 + 4*lane, map_waypoints_s, map_waypoints_x, map_waypoints_y);
           vector<double> next_wp2 = getXY(car_s + 90, 2 + 4*lane, map_waypoints_s, map_waypoints_x, map_waypoints_y);
@@ -238,7 +242,9 @@ int main() {
           ptsy.push_back(next_wp2[1]);
 
           // Transform to local car coordinates.
+          // 转换为自车坐标
           for ( int i = 0; i < ptsx.size(); i++ ) {
+              // shift car reference angle to 0 degree
               double shift_x = ptsx[i] - ref_x;
               double shift_y = ptsy[i] - ref_y;
 
@@ -250,14 +256,16 @@ int main() {
           tk::spline s;
 
           // set (x,y) points to the spline
+          // 利用pts里的5个waypoints构建一条spline样条曲线
           s.set_points(ptsx, ptsy);
 
-          // Define the actual(x, y) points used for the planner
+          // Define the actual(x, y) points in global coordinates used for the planner
           // from previous path for continuity
           vector<double> next_x_vals;
           vector<double> next_y_vals;
 
           // Start with all of the previous path points from last time
+          // 将全部的previous points（<=50个）加入到next_vals中
           for (int i=0; i<previous_path_x.size(); i++){
               next_x_vals.push_back(previous_path_x[i]);
               next_y_vals.push_back(previous_path_y[i]);
@@ -265,6 +273,9 @@ int main() {
 
           // Calculate how to break up spline points so that travelling at the desired reference velocity
           // Calculate distance y position 30m ahead
+          // spline曲线由相隔较远的5个waypoints构成，在此利用该spline计算local坐标系下接下来30m的轨迹
+          // 每0.02秒为一个时间间隔计算出30m内每一个小间隔的x值以及对应的spline(x)值
+          // 最后转换为global coordinates
           double target_x = 30.0;
           double target_y = s(target_x);
           double target_dist = sqrt(target_x*target_x + target_y*target_y);
@@ -280,6 +291,7 @@ int main() {
                 ref_vel = MAX_ACC;
               }
 
+              // Calculate N, x_point, y_point
               double N = target_dist/(0.02*ref_vel/2.24);
               double x_point = x_add_on + target_x/N;
               double y_point = s(x_point);
@@ -289,7 +301,7 @@ int main() {
               double x_ref = x_point;
               double y_ref = y_point;
 
-              // rotate back to global coordinates
+              // Transform back to global coordinates
               x_point = x_ref * cos(ref_yaw) - y_ref * sin(ref_yaw);
               y_point = x_ref * sin(ref_yaw) + y_ref * cos(ref_yaw);
 

@@ -51,16 +51,17 @@ PS：并不能保证生成的位置都是可行驶的（因为A*是离散的 不
 ![Alt text](./practice.png)
 
 ![Alt text](./omega.png)
+
 w（omega）：有关变化无关状态的变化率（heading rate of change）
 v：值为正的恒定速度
 L：前后轴的距离
-delta：车头转向角（添加的delta越多，计算量越高，计算时间越长）
+delta：车头转向角度（添加的delta越多，计算量越高，计算时间越长）
 
 ### 3.4 Hybrid A* Pseudocode
 （非结构化环境中路径搜索的最佳算法之一）
 ![Alt text](./hybrid_A*_pseudocode.png)
 
-``` 
+``` c++
 def expand(state, goal):
     next_states = []
     for delta in range(-35, 40, 5): 
@@ -84,7 +85,7 @@ def expand(state, goal):
 
     return next_states
 ```
-```
+```c++
 def search(grid, start, goal):
     # The opened array keeps track of the stack of States objects we are 
     # searching through.
@@ -202,13 +203,29 @@ def search(grid, start, goal):
 ### 5.4 Feasibility（可行性）
 ![Alt text](./feasibility1.png)
 - 最大速度（车辆自身限速）
+
 - 最小速度（倒车最低速度）
+
 - 最大加速度（横向侧滑，纵向动力输出）
+
 - 最小加速度（纵向制动）
+
 - 转向角度
-![Alt text](./feasibility2.png)
+  ![Alt text](./feasibility2.png)
 
+  L：轮轴间距
 
+  R：曲率半径  （k=1/R	=>	tan(delta)=k*L	=>	k=tan(delta)/L ）
+
+  delta：车头转向角度
+
+  K：曲率
+
+  phi：切线的转角（轨迹上两点之间的最大变化值）
+
+  xi：弧长（两点间曲线距离）
+
+  
 
 ## 6. 基于抽样的Polynomial Trajectory
 
@@ -238,26 +255,27 @@ eg. points 0.5 m apart（点与点之间相隔0.5m） => a velocity of 25 m/
 ### Constraints
 - Acceleration（每2秒计算1次，< 75m/s^2）
 - Jerk（每1秒计算1次，< 10m/s^3）
-- AccN（转向时的向心加速度：转向越快 AccN越高 centripetal acceleration）
+- AccN（转向时的向心/发向加速度：转向越快 AccN越高 normal acceleration）
 - AccT （转向时的切向加速度 tangential acceleration）
 
 ### Main Method
 - Minimize Acc and Jerk based on `car_speed`
 - 在`main.cpp`中，我们直接将`next_x_vals`和`next_y_vals`传递给模拟器，而不是直接设置速度。 我们将这些点设置为相距0.5 m。 由于汽车每秒移动50次，因此每次移动0.5m的距离将产生25m / s的速度。 25 m / s接近50 MPH。
-```
+```c++
 double dist_inc = 0.5;
 for (int i = 0; i < 50; ++i) {
 	  next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
 	  next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
 }
 ```
-- Note: High peak in Acceleration from 0 MPH to 56 MPH in a single 20ms.（在单个20 ms帧中从0 MPH上升到56 MPH，会导致加速度峰值）
+- Note: High peak in Acceleration from 0 MPH to 50 MPH in a single 20ms.（在单个20 ms帧中从0 MPH上升到50 MPH，会导致加速度峰值）
+- 上面的代码将会使车辆沿着直线行驶，而非沿着车道的方向。
 
 
 
 
 ### More complex Path
-```
+```c++
 vector<double> next_x_vals;
 vector<double> next_y_vals;
 
@@ -321,7 +339,7 @@ msgJson["next_y"] = next_y_vals
 - Waypoint Data（航点数据）
 	- 每个航路点都有一个（x，y）全局地图位置，以及一个Frenet s值和Frenet d单位法向矢量（分为x分量和y分量）。
 	- s值是沿道路方向的距离。第一个航点的s值为0，因为它是起点。
-	- d向量的大小为1，并且在道路的右侧指向垂直于道路的点。 d向量可用于计算车道位置。例如，如果您想在某个航路点处位于左车道，只需将航路点的（x，y）坐标与d矢量乘以2相加即可。由于车道宽4 m，因此左车道的中间位置（车道最靠近双黄线的地方是距航路点2 m。
+	- d向量的单位大小为1，并且在道路的右侧指向垂直于道路的点。 d向量可用于计算车道位置。例如，如果您想在某个航路点处位于左车道，只需将航路点的（x，y）坐标与d矢量乘以2相加即可。由于车道宽4 m，因此左车道的中间位置（车道最靠近双黄线的地方是距航路点2 m。
 	- 如果您想位于中间车道，请将路标坐标添加到d矢量乘以6 =（2 + 4），因为中间车道的中心距左侧车道的中心4 m距双黄分割线和航路点2 m。
 
 - Converting Frenet Coordinates

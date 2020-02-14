@@ -22,20 +22,20 @@ eg. points 0.5 m apart（点与点之间相隔0.5m） => a velocity of 25 m/
 
 - Minimize Acc and Jerk based on `car_speed`
 - 在`main.cpp`中，我们直接将`next_x_vals`和`next_y_vals`传递给模拟器，而不是直接设置速度。 我们将这些点设置为相距0.5 m。 由于汽车每秒移动50次，因此每次移动0.5m的距离将产生25m / s的速度。 25 m / s接近50 MPH。
-```
+```c++
 double dist_inc = 0.5;
 for (int i = 0; i < 50; ++i) {
 	  next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
 	  next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
 }
 ```
-- Note: High peak in Acceleration from 0 MPH to 56 MPH in a single 20ms.（在单个20 ms帧中从0 MPH上升到56 MPH，会导致加速度峰值）
+- Note: High peak in Acceleration from 0 MPH to 50 MPH in a single 20ms.（在单个20 ms帧中从0 MPH上升到50 MPH，会导致加速度峰值）
 
-
+- 上面的代码将会使车辆沿着直线行驶，而非沿着车道的方向。
 
 ## More complex Path
 
-```
+```c++
 vector<double> next_x_vals;
 vector<double> next_y_vals;
 
@@ -128,5 +128,3 @@ msgJson["next_y"] = next_y_vals
 - For safety，换道should optimize the distance away from other traffic （优化与其他交通的距离）。 
 - For comfort，换道也should result in low acceleration and jerk（较低的加速度和加速度）。 Acc加速度和Jerk加速度部分可以通过s和d函数的线性方程求解。
 - `Eigen-3.3库`可以求解此类线性方程。 `getXY`函数可以将`（s，d）`点转换为返回路径的`（x，y）`点。
-
-
