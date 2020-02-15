@@ -334,7 +334,7 @@
 
    ![coordinates_transform](./images/coordinates_transform.jpg)
 
-   ![image-20200214200146633](/Users/jinjingjie/CarND_Highway_Driving/images/x1y1.png)
+   ![x1y1](./images/x1y1.png)
 
 3. In order to ensure more continuity on the trajectory, all of the previous trajectory points are copied to the new trajectory. The rest points are calculated by evaluating the **spline** and transforming the output coordinates to global coordinates.  Note that the change of velocity is determined by the behavior in order to increase/decrease speed on every single trajectory point instead of the entire trajectory.
 
