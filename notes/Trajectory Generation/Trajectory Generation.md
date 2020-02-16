@@ -1,8 +1,12 @@
+---
+typora-root-url: ./
+---
+
 # Trajectory Generation
 
 ## 1. OVERVIEW
 ### 1.1 Motion Planning Problem（运动规划）
-![Alt text](./motion_planning.png)
+![motion_planning](./motion_planning.png)
 
 #### 配置空间
 #### 给定：

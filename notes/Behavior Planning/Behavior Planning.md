@@ -1,3 +1,7 @@
+---
+typora-root-url: ./
+---
+
 # Behavior Planning
 
 ## 1.OVERVIEW
