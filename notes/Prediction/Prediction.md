@@ -167,8 +167,8 @@ Process Models are first used to compare a **target vehicle's observed behavior*
 
   
 
-  where the **μ*k*(*i*)** is the probability that model number **i** is the correct model at time **k** and **Lk(i)** is the **likelihood** for that model (as computed by comparison to process model).
+  where the **μ~k~^(i)^** is the probability that model number **i** is the correct model at time **k** and **L~k~^(i)^** is the **likelihood** for that model (as computed by comparison to process model).
 
-  **μ*k*(*i*)** 是模型编号**i**在时间**k**处为正确模型的概率，**Lk(i)** 是该模型的可能性（通过与过程模型进行比较计算得出）。
+   **μ~k~^(i)^** 是模型编号**i**在时间**k**处为正确模型的概率，**L~k~^(i)^**是该模型的可能性（通过与过程模型进行比较计算得出）。
 
   
