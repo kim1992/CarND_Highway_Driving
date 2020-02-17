@@ -128,7 +128,7 @@
 
    （右侧是否有不安全的车辆在进行变道。）
 
-- Is there a car to the left of us making a lane change not safe which is not safe.
+- Is there a car to the left of us making a lane change which is not safe.
 
    （左侧是否有不安全的车辆在进行变道。）
 
